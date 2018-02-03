@@ -1,6 +1,6 @@
 #include "ScriptPCH.h"
 #include "DisableMgr.h"
-#include "Configuration\Config.h"
+#include "Config.h"
 #include "Player.h"
 
 uint32 MaxLevel;
