@@ -37,7 +37,7 @@ class LearnSpellsOnLevelUp : public PlayerScript
     {
         if (sConfigMgr->GetBoolDefault("LearnSpells.Enable", true))
         {
-            if (player->getLevel() < MaxLevel)
+            if (player->getLevel() <= MaxLevel)
             {
                 if (oldLevel < player->getLevel())
                     LearnSpellsForNewLevel(player, oldLevel);
