@@ -233,7 +233,7 @@ class LearnSpellsOnLevelUp : public PlayerScript
                     continue;
                 if (DisableMgr::IsDisabledFor(DISABLE_TYPE_SPELL, spellInfo->Id, player))
                     continue;
-                if (spellInfo->BaseLevel != level && sSpellMgr->IsSpellValid(spellInfo))
+                if (spellInfo->BaseLevel != uint32(level) && sSpellMgr->IsSpellValid(spellInfo))
                     continue;
 
                 bool valid = false;
