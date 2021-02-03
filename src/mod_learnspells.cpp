@@ -76,133 +76,133 @@ class LearnSpellsOnLevelUp : public PlayerScript
          {
              {SPELLFAMILY_WARRIOR,
               {
-                  AddSpell{.spellId = 3127}, // parry
+                  AddSpell{3127}, // parry
               }},
          }},
         {8,
          {
              {SPELLFAMILY_HUNTER,
               {
-                  AddSpell{.spellId = 3127}, // parry
+                  AddSpell{3127}, // parry
               }},
              {SPELLFAMILY_PALADIN,
               {
-                  AddSpell{.spellId = 3127}, // parry
+                  AddSpell{3127}, // parry
               }},
          }},
         {10,
          {
              {SPELLFAMILY_HUNTER,
               {
-                  AddSpell{.spellId = 1515}, // tame beast
+                  AddSpell{1515}, // tame beast
               }},
          }},
         {12,
          {
              {SPELLFAMILY_ROGUE,
               {
-                  AddSpell{.spellId = 3127}, // parry
+                  AddSpell{3127}, // parry
               }},
          }},
         {14,
          {
              {SPELLFAMILY_HUNTER,
               {
-                  AddSpell{.spellId = 6197}, // eagle eye
+                  AddSpell{6197}, // eagle eye
               }},
          }},
         {20,
          {
              {SPELLFAMILY_WARRIOR,
               {
-                  AddSpell{.spellId = 674},   // dual wield
-                  AddSpell{.spellId = 12678}, // stance mastery
+                  AddSpell{674},   // dual wield
+                  AddSpell{12678}, // stance mastery
               }},
              {SPELLFAMILY_HUNTER,
               {
-                  AddSpell{.spellId = 674}, // dual wield
+                  AddSpell{674}, // dual wield
               }},
          }},
         {24,
          {
              {SPELLFAMILY_HUNTER,
               {
-                  AddSpell{.spellId = 1462}, //  Beast Lore
+                  AddSpell{1462}, //  Beast Lore
               }},
              {SPELLFAMILY_ROGUE,
               {
-                  AddSpell{.spellId = 2836}, //  Detect Traps
+                  AddSpell{2836}, //  Detect Traps
               }},
              {SPELLFAMILY_WARLOCK,
               {
-                  AddSpell{.spellId = 5500}, //  Sense Demons
+                  AddSpell{5500}, //  Sense Demons
               }},
          }},
         {24,
          {
              {SPELLFAMILY_SHAMAN,
               {
-                  AddSpell{.spellId = 6196}, //  Far Sight
+                  AddSpell{6196}, //  Far Sight
               }},
          }},
         {30,
          {
              {SPELLFAMILY_SHAMAN,
               {
-                  AddSpell{.spellId = 66842}, // Call of the Elements
+                  AddSpell{66842}, // Call of the Elements
               }},
          }},
         {32,
          {
              {SPELLFAMILY_DRUID,
               {
-                  AddSpell{.spellId = 5225}, // Track Humanoids
+                  AddSpell{5225}, // Track Humanoids
               }},
          }},
         {40,
          {
              {SPELLFAMILY_SHAMAN,
               {
-                  AddSpell{.spellId = 66843}, // Call of the Ancestors
+                  AddSpell{66843}, // Call of the Ancestors
               }},
              {SPELLFAMILY_DRUID,
               {
-                  AddSpell{.spellId = 20719}, // Feline Grace
-                  AddSpell{.spellId = 62600}, // Savage Defense
+                  AddSpell{20719}, // Feline Grace
+                  AddSpell{62600}, // Savage Defense
               }},
          }},
         {50,
          {
              {SPELLFAMILY_SHAMAN,
               {
-                  AddSpell{.spellId = 66844}, // Call of the Spirits
+                  AddSpell{66844}, // Call of the Spirits
               }},
          }},
         {66,
          {
              {SPELLFAMILY_PALADIN,
               {
-                  AddSpell{.spellId = 53736, .faction = TeamId::TEAM_HORDE},    // Seal of Corruption
-                  AddSpell{.spellId = 31801, .faction = TeamId::TEAM_ALLIANCE}, // Seal of Vengeance
+                  AddSpell{53736, TeamId::TEAM_HORDE},    // Seal of Corruption
+                  AddSpell{31801, TeamId::TEAM_ALLIANCE}, // Seal of Vengeance
               }},
              {SPELLFAMILY_WARLOCK,
               {
-                  AddSpell{.spellId = 29858}, // Soulshatter
+                  AddSpell{29858}, // Soulshatter
               }},
          }},
         {70,
          {
              {SPELLFAMILY_SHAMAN,
               {
-                  AddSpell{.spellId = 2825, .faction = TeamId::TEAM_HORDE},     // Bloodlust
-                  AddSpell{.spellId = 32182, .faction = TeamId::TEAM_ALLIANCE}, // Heroism
+                  AddSpell{2825, TeamId::TEAM_HORDE},     // Bloodlust
+                  AddSpell{32182, TeamId::TEAM_ALLIANCE}, // Heroism
               }},
          }},
         {80,
          {
              {SPELLFAMILY_WARLOCK,
               {
-                  AddSpell{.spellId = 47836}, // Seed of Corruption (rank 3)
+                  AddSpell{47836}, // Seed of Corruption (rank 3)
               }},
          }},
     };
