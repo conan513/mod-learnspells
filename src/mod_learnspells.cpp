@@ -5,7 +5,23 @@
 #include "ScriptMgr.h"
 #include "SpellInfo.h"
 
-uint32 MaxLevel;
+static bool learnlpells_announce;
+static bool learnspells_enable;
+static bool learnspells_onfirstlogin;
+static uint32 learnspells_maxlevel;
+
+class LearnAllSpellseBeforeConfigLoad : public WorldScript {
+public:
+
+    LearnAllSpellseBeforeConfigLoad() : WorldScript("LearnAllSpellseBeforeConfigLoad") { }
+
+    void OnBeforeConfigLoad(bool /*reload*/) override {
+        learnlpells_announce = sConfigMgr->GetBoolDefault("LearnSpells.Announce", 1);
+        learnspells_enable = sConfigMgr->GetBoolDefault("LearnSpells.Enable", 1);
+        learnspells_onfirstlogin = sConfigMgr->GetBoolDefault("LearnSpells.OnFirstLogin", 0);
+        learnspells_maxlevel = sConfigMgr->GetIntDefault("learnspells_maxlevel", 80);
+    }
+};
 
 class LearnSpellsOnLevelUp : public PlayerScript
 {
@@ -16,29 +32,22 @@ class LearnSpellsOnLevelUp : public PlayerScript
 
     void OnLogin(Player* player) override
     {
-        if (sConfigMgr->GetBoolDefault("LearnSpells.Enable", true))
-        {
-            if (sConfigMgr->GetBoolDefault("LearnSpells.Announce", true))
-            {
-                ChatHandler(player->GetSession()).SendSysMessage("This server is running the |cff4CFF00LearnAllSpells |rmodule.");
-            }
+        if (learnspells_enable && learnlpells_announce){
+            ChatHandler(player->GetSession()).SendSysMessage("This server is running the |cff4CFF00LearnAllSpells |rmodule.");
         }
     }
 
     void OnFirstLogin(Player* player) override
     {
-        if (sConfigMgr->GetBoolDefault("LearnSpells.LearnAllOnFirstLogin", false))
-        {
+        if (learnspells_onfirstlogin){
             LearnSpellsForNewLevel(player, 1);
         }
     }
 
     void OnLevelChanged(Player* player, uint8 oldLevel) override
     {
-        if (sConfigMgr->GetBoolDefault("LearnSpells.Enable", true))
-        {
-            if (player->getLevel() <= MaxLevel)
-            {
+        if (sConfigMgr->GetBoolDefault("LearnSpells.Enable", true)){
+            if (player->getLevel() <= learnspells_maxlevel){
                 if (oldLevel < player->getLevel())
                     LearnSpellsForNewLevel(player, oldLevel);
             }
@@ -319,34 +328,8 @@ class LearnSpellsOnLevelUp : public PlayerScript
     }
 };
 
-class LearnAllSpellsWorld : public WorldScript
-{
-  public:
-    LearnAllSpellsWorld() : WorldScript("LearnAllSpellsWorld")
-    {
-    }
-
-    void OnBeforeConfigLoad(bool reload) override
-    {
-        if (!reload)
-        {
-            std::string conf_path = _CONF_DIR;
-            std::string cfg_file = conf_path + "/mod_learnspells.conf";
-#ifdef WIN32
-            cfg_file = "mod_learnspells.conf";
-#endif
-            std::string cfg_def_file = cfg_file + ".dist";
-            sConfigMgr->LoadMore(cfg_def_file.c_str());
-
-            sConfigMgr->LoadMore(cfg_file.c_str());
-
-            MaxLevel = sConfigMgr->GetIntDefault("MaxLevel", 80);
-        }
-    }
-};
-
 void AddLearnAllSpellsScripts()
 {
-    new LearnAllSpellsWorld();
+    new LearnAllSpellseBeforeConfigLoad();
     new LearnSpellsOnLevelUp();
 }
