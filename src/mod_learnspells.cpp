@@ -5,57 +5,31 @@
 #include "ScriptMgr.h"
 #include "SpellInfo.h"
 
-static bool learnlpells_announce;
-static bool learnspells_enable;
-static bool learnspells_onfirstlogin;
-static uint32 learnspells_maxlevel;
-
-class LearnAllSpellseBeforeConfigLoad : public WorldScript {
-public:
-
-    LearnAllSpellseBeforeConfigLoad() : WorldScript("LearnAllSpellseBeforeConfigLoad") { }
-
-    void OnBeforeConfigLoad(bool /*reload*/) override {
-        learnlpells_announce = sConfigMgr->GetBoolDefault("LearnSpells.Announce", 1);
-        learnspells_enable = sConfigMgr->GetBoolDefault("LearnSpells.Enable", 1);
-        learnspells_onfirstlogin = sConfigMgr->GetBoolDefault("LearnSpells.OnFirstLogin", 0);
-        learnspells_maxlevel = sConfigMgr->GetIntDefault("learnspells_maxlevel", 80);
-    }
-};
-
 class LearnSpellsOnLevelUp : public PlayerScript
 {
-  public:
-    LearnSpellsOnLevelUp() : PlayerScript("LearnSpellsOnLevelUp")
-    {
-    }
-
-    void OnLogin(Player* player) override
-    {
-        if (learnspells_enable && learnlpells_announce){
-            ChatHandler(player->GetSession()).SendSysMessage("This server is running the |cff4CFF00LearnAllSpells |rmodule.");
-        }
-    }
+public:
+    LearnSpellsOnLevelUp() : PlayerScript("LearnSpellsOnLevelUp") { }
 
     void OnFirstLogin(Player* player) override
     {
-        if (learnspells_onfirstlogin){
+        if (sConfigMgr->GetOption<bool>("LearnSpells.OnFirstLogin", 0))
+        {
             LearnSpellsForNewLevel(player, 1);
         }
     }
 
     void OnLevelChanged(Player* player, uint8 oldLevel) override
     {
-        if (sConfigMgr->GetBoolDefault("LearnSpells.Enable", true)){
-            if (player->getLevel() <= learnspells_maxlevel){
-                if (oldLevel < player->getLevel())
-                    LearnSpellsForNewLevel(player, oldLevel);
-            }
+        if (sConfigMgr->GetOption<bool>("LearnSpells.Enable", true))
+        {
+            if (player->getLevel() <= sConfigMgr->GetOption<uint8>("LearnSpells.MaxLevel", 80) && oldLevel < player->getLevel())
+                LearnSpellsForNewLevel(player, oldLevel);
         }
     }
 
-  private:
-    std::unordered_set<uint32> m_ignoreSpells = {
+private:
+    std::unordered_set<uint32> m_ignoreSpells =
+    {
         64380, 23885, 23880, 44461, 25346, 10274, 10273, 8418,  8419,  7270,  7269,  7268,  54648, 12536, 24530, 70909, 12494, 57933, 24224, 27095, 27096, 27097, 27099, 32841, 56131, 56160, 56161, 48153, 34754, 64844, 64904, 48085, 33110, 48084,
         28276, 27874, 27873, 7001,  49821, 53022, 47757, 47750, 47758, 47666, 53001, 52983, 52998, 52986, 52987, 52999, 52984, 53002, 53003, 53000, 52988, 52985, 42208, 42209, 42210, 42211, 42212, 42213, 42198, 42937, 42938, 12484, 12485, 12486,
         44461, 55361, 55362, 34913, 43043, 43044, 38703, 38700, 27076, 42844, 42845, 64891, 25912, 25914, 25911, 25913, 25902, 25903, 27175, 27176, 33073, 33074, 48822, 48820, 48823, 48821, 20154, 25997, 20467, 20425, 67,    26017, 34471, 53254,
@@ -80,146 +54,146 @@ class LearnSpellsOnLevelUp : public PlayerScript
     using AdditionalSpellsList = std::unordered_map<uint8, SpellFamilyToExtraSpells>;
     // -------------------------------------------- ^^^^^ level
 
-    AdditionalSpellsList m_additionalSpells = {
+    AdditionalSpellsList m_additionalSpells =
+    {
         {6,
-         {
-             {SPELLFAMILY_WARRIOR,
-              {
-                  AddSpell{3127}, // parry
-              }},
-         }},
+        {
+            {SPELLFAMILY_WARRIOR,
+            {
+                AddSpell{3127}, // parry
+            }},
+        }},
         {8,
-         {
-             {SPELLFAMILY_HUNTER,
-              {
-                  AddSpell{3127}, // parry
-              }},
-             {SPELLFAMILY_PALADIN,
-              {
-                  AddSpell{3127}, // parry
-              }},
-         }},
+        {
+            {SPELLFAMILY_HUNTER,
+            {
+                AddSpell{3127}, // parry
+            }},
+            {SPELLFAMILY_PALADIN,
+            {
+                AddSpell{3127}, // parry
+            }},
+        }},
         {10,
-         {
-             {SPELLFAMILY_HUNTER,
-              {
-                  AddSpell{1515}, // tame beast
-              }},
-         }},
+        {
+            {SPELLFAMILY_HUNTER,
+            {
+                AddSpell{1515}, // tame beast
+            }},
+        }},
         {12,
-         {
-             {SPELLFAMILY_ROGUE,
-              {
-                  AddSpell{3127}, // parry
-              }},
-         }},
+        {
+            {SPELLFAMILY_ROGUE,
+            {
+                AddSpell{3127}, // parry
+            }},
+        }},
         {14,
-         {
-             {SPELLFAMILY_HUNTER,
-              {
-                  AddSpell{6197}, // eagle eye
-              }},
-         }},
+        {
+            {SPELLFAMILY_HUNTER,
+            {
+                AddSpell{6197}, // eagle eye
+            }},
+        }},
         {20,
-         {
-             {SPELLFAMILY_WARRIOR,
-              {
-                  AddSpell{674},   // dual wield
-                  AddSpell{12678}, // stance mastery
-              }},
-             {SPELLFAMILY_HUNTER,
-              {
-                  AddSpell{674}, // dual wield
-              }},
-         }},
+        {
+            {SPELLFAMILY_WARRIOR,
+            {
+                AddSpell{674},   // dual wield
+                AddSpell{12678}, // stance mastery
+            }},
+            {SPELLFAMILY_HUNTER,
+            {
+                AddSpell{674}, // dual wield
+            }},
+        }},
         {24,
-         {
-             {SPELLFAMILY_HUNTER,
-              {
-                  AddSpell{1462}, //  Beast Lore
-              }},
-             {SPELLFAMILY_ROGUE,
-              {
-                  AddSpell{2836}, //  Detect Traps
-              }},
-             {SPELLFAMILY_WARLOCK,
-              {
-                  AddSpell{5500}, //  Sense Demons
-              }},
-         }},
+        {
+            {SPELLFAMILY_HUNTER,
+            {
+                AddSpell{1462}, //  Beast Lore
+            }},
+            {SPELLFAMILY_ROGUE,
+            {
+                AddSpell{2836}, //  Detect Traps
+            }},
+            {SPELLFAMILY_WARLOCK,
+            {
+                AddSpell{5500}, //  Sense Demons
+            }},
+        }},
         {24,
-         {
-             {SPELLFAMILY_SHAMAN,
-              {
-                  AddSpell{6196}, //  Far Sight
-              }},
-         }},
+        {
+            {SPELLFAMILY_SHAMAN,
+            {
+                AddSpell{6196}, //  Far Sight
+            }},
+        }},
         {30,
-         {
-             {SPELLFAMILY_SHAMAN,
-              {
-                  AddSpell{66842}, // Call of the Elements
-              }},
-         }},
+        {
+            {SPELLFAMILY_SHAMAN,
+            {
+                AddSpell{66842}, // Call of the Elements
+            }},
+        }},
         {32,
-         {
-             {SPELLFAMILY_DRUID,
-              {
-                  AddSpell{5225}, // Track Humanoids
-              }},
-         }},
+        {
+            {SPELLFAMILY_DRUID,
+            {
+                AddSpell{5225}, // Track Humanoids
+            }},
+        }},
         {40,
-         {
-             {SPELLFAMILY_SHAMAN,
-              {
-                  AddSpell{66843}, // Call of the Ancestors
-              }},
-             {SPELLFAMILY_DRUID,
-              {
-                  AddSpell{20719}, // Feline Grace
-                  AddSpell{62600}, // Savage Defense
-              }},
-         }},
+        {
+            {SPELLFAMILY_SHAMAN,
+            {
+                AddSpell{66843}, // Call of the Ancestors
+            }},
+            {SPELLFAMILY_DRUID,
+            {
+                AddSpell{20719}, // Feline Grace
+                AddSpell{62600}, // Savage Defense
+            }},
+        }},
         {50,
-         {
-             {SPELLFAMILY_SHAMAN,
-              {
-                  AddSpell{66844}, // Call of the Spirits
-              }},
-         }},
+        {
+            {SPELLFAMILY_SHAMAN,
+            {
+                AddSpell{66844}, // Call of the Spirits
+            }},
+        }},
         {66,
-         {
-             {SPELLFAMILY_PALADIN,
-              {
-                  AddSpell{53736, TeamId::TEAM_HORDE},    // Seal of Corruption
-                  AddSpell{31801, TeamId::TEAM_ALLIANCE}, // Seal of Vengeance
-              }},
-             {SPELLFAMILY_WARLOCK,
-              {
-                  AddSpell{29858}, // Soulshatter
-              }},
-         }},
+        {
+            {SPELLFAMILY_PALADIN,
+            {
+                AddSpell{53736, TeamId::TEAM_HORDE},    // Seal of Corruption
+                AddSpell{31801, TeamId::TEAM_ALLIANCE}, // Seal of Vengeance
+            }},
+            {SPELLFAMILY_WARLOCK,
+            {
+                AddSpell{29858}, // Soulshatter
+            }},
+        }},
         {70,
-         {
-             {SPELLFAMILY_SHAMAN,
-              {
-                  AddSpell{2825, TeamId::TEAM_HORDE},     // Bloodlust
-                  AddSpell{32182, TeamId::TEAM_ALLIANCE}, // Heroism
-              }},
-         }},
+        {
+            {SPELLFAMILY_SHAMAN,
+            {
+                AddSpell{2825, TeamId::TEAM_HORDE},     // Bloodlust
+                AddSpell{32182, TeamId::TEAM_ALLIANCE}, // Heroism
+            }},
+        }},
         {80,
-         {
-             {SPELLFAMILY_WARLOCK,
-              {
-                  AddSpell{47836}, // Seed of Corruption (rank 3)
-              }},
-         }},
+        {
+            {SPELLFAMILY_WARLOCK,
+            {
+                AddSpell{47836}, // Seed of Corruption (rank 3)
+            }},
+        }},
     };
 
     bool IsIgnoredSpell(uint32 spellID)
     {
-        auto spellIt = m_ignoreSpells.find(spellID);
-        return spellIt != m_ignoreSpells.end();
+        return m_ignoreSpells.find(spellID) != m_ignoreSpells.end();
     }
 
     void LearnSpellsForNewLevel(Player* player, uint8 fromLevel)
@@ -230,22 +204,29 @@ class LearnSpellsOnLevelUp : public PlayerScript
         for (int level = fromLevel; level <= upToLevel; level++)
         {
             ApplyAdditionalSpells(level, family, player);
+
             for (uint32 i = 0; i < sSpellMgr->GetSpellInfoStoreSize(); ++i)
             {
                 SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(i);
 
                 if (!spellInfo)
                     continue;
+
                 if (spellInfo->SpellFamilyName != family)
                     continue;
-                if ((spellInfo->AttributesEx7 & SPELL_ATTR7_ALLIANCE_ONLY && player->GetTeamId() != TEAM_ALLIANCE) || (spellInfo->AttributesEx7 & SPELL_ATTR7_HORDE_ONLY && player->GetTeamId() != TEAM_HORDE))
+
+                if ((spellInfo->AttributesEx7 & SPELL_ATTR7_ALLIANCE_SPECIFIC_SPELL && player->GetTeamId() != TEAM_ALLIANCE) || (spellInfo->AttributesEx7 & SPELL_ATTR7_HORDE_SPECIFIC_SPELL && player->GetTeamId() != TEAM_HORDE))
                     continue;
+
                 if (spellInfo->PowerType == POWER_FOCUS)
                     continue;
+
                 if (IsIgnoredSpell(spellInfo->Id))
                     continue;
+
                 if (DisableMgr::IsDisabledFor(DISABLE_TYPE_SPELL, spellInfo->Id, player))
                     continue;
+
                 if (spellInfo->BaseLevel != uint32(level) && sSpellMgr->IsSpellValid(spellInfo))
                     continue;
 
@@ -253,20 +234,23 @@ class LearnSpellsOnLevelUp : public PlayerScript
 
                 SkillLineAbilityMapBounds bounds = sSpellMgr->GetSkillLineAbilityMapBounds(spellInfo->Id);
 
-                for (SkillLineAbilityMap::const_iterator itr = bounds.first; itr != bounds.second; ++itr)
+                for (auto itr = bounds.first; itr != bounds.second; ++itr)
                 {
                     if (itr->second->spellId == spellInfo->Id && itr->second->racemask == 0 && itr->second->learnOnGetSkill == 0)
                     {
                         valid = true;
                         SpellInfo const* prevSpell = spellInfo->GetPrevRankSpell();
+
                         if (prevSpell && !player->HasSpell(prevSpell->Id))
                         {
                             valid = false;
                             break;
                         }
+
                         if (GetTalentSpellPos(itr->second->spellId))
                             if (!prevSpell || !player->HasSpell(prevSpell->Id) || spellInfo->GetRank() == 1)
                                 valid = false;
+
                         break;
                     }
                 }
@@ -283,6 +267,7 @@ class LearnSpellsOnLevelUp : public PlayerScript
         if (spells != m_additionalSpells.end())
         {
             SpellFamilyToExtraSpells spellsMap = spells->second;
+
             auto spellsForPlayersFamily = spellsMap.find(playerSpellFamily);
             if (spellsForPlayersFamily != spellsMap.end())
             {
@@ -328,8 +313,7 @@ class LearnSpellsOnLevelUp : public PlayerScript
     }
 };
 
-void AddLearnAllSpellsScripts()
+void AddSC_LearnAllSpells()
 {
-    new LearnAllSpellseBeforeConfigLoad();
     new LearnSpellsOnLevelUp();
 }
