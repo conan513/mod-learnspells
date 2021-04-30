@@ -21,4 +21,4 @@ LearnSpells.LearnAllOnFirstLogin = 0
 # Max level Limit the player will learn spells
 # 	Default:  = 80
 
-MaxLevel = 80
+LearnSpells.MaxLevel = 80
