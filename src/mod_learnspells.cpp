@@ -271,7 +271,7 @@ private:
             auto spellsForPlayersFamily = spellsMap.find(playerSpellFamily);
             if (spellsForPlayersFamily != spellsMap.end())
             {
-                vector<AddSpell> additionalSpellsToTeach = spellsForPlayersFamily->second;
+                std::vector<AddSpell> additionalSpellsToTeach = spellsForPlayersFamily->second;
                 for (auto const& spell : additionalSpellsToTeach)
                 {
                     if (!(player->HasSpell(spell.spellId)) && (spell.faction == TeamId::TEAM_NEUTRAL || spell.faction == player->GetTeamId()))
