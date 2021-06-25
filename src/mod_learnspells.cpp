@@ -236,7 +236,7 @@ private:
 
                 for (auto itr = bounds.first; itr != bounds.second; ++itr)
                 {
-                    if (itr->second->Spell == spellInfo->Id && itr->second->RaceMask == 0 && itr->second->AquireMethod == 0)
+                    if (itr->second->Spell == spellInfo->Id && itr->second->RaceMask == 0 && itr->second->AcquireMethod == 0)
                     {
                         valid = true;
                         SpellInfo const* prevSpell = spellInfo->GetPrevRankSpell();
