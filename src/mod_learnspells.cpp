@@ -236,7 +236,7 @@ private:
 
                 for (auto itr = bounds.first; itr != bounds.second; ++itr)
                 {
-                    if (itr->second->spellId == spellInfo->Id && itr->second->racemask == 0 && itr->second->learnOnGetSkill == 0)
+                    if (itr->second->Spell == spellInfo->Id && itr->second->RaceMask == 0 && itr->second->AquireMethod == 0)
                     {
                         valid = true;
                         SpellInfo const* prevSpell = spellInfo->GetPrevRankSpell();
@@ -247,7 +247,7 @@ private:
                             break;
                         }
 
-                        if (GetTalentSpellPos(itr->second->spellId))
+                        if (GetTalentSpellPos(itr->second->Spell))
                             if (!prevSpell || !player->HasSpell(prevSpell->Id) || spellInfo->GetRank() == 1)
                                 valid = false;
 
